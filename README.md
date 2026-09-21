@@ -1,78 +1,94 @@
-# Zipspeed by AnakinYoo
+# Test speed by AnakinYoo
 
-Zipspeed is an Android-first network measurement and diagnostics app built with Kotlin + Jetpack Compose.
+Android-first internet speed-test MVP focused on measurement integrity.
 
-## Current implementation
+Version in this ZIP: **1.1.0** (`versionCode 2`)
 
-The Android app currently includes:
+## What works
+- GO / STOP flow.
+- Provider metadata lookup for IP / ISP / edge / client-area fields when available.
+- Measured HTTP latency samples and jitter calculated from those samples.
+- Single-stream HTTP download throughput from actual bytes read + monotonic elapsed time.
+- Single-stream HTTP upload throughput from actual bytes written + monotonic elapsed time.
+- HTTP 2xx validation before accepting a phase.
+- Expected payload-byte validation before accepting download/upload results.
+- `Accept-Encoding: identity` and no-cache request headers for measurement byte integrity.
+- Unknown metadata displays `--` rather than guessed data.
+- Re-test clears stale results/metadata first.
+- Leaving the activity cancels an active test to avoid hidden background transfer.
+- Dark/light appearance follows the Android system configuration.
 
-- HTTP-based Download / Upload throughput measurement.
-- HTTP latency and jitter measurement.
-- A single GO control with live gauge/needle updates and cancel/retry flow.
-- Cloudflare Anycast endpoint routing; the app does not pretend that a specific city/PoP was selected unless verifiable endpoint metadata is returned.
-- Public/local IP information where available.
-- Video-suitability testing based on measured HTTP payload throughput. It is not a real video player.
-- Website/CDN HTTP checks with measured response-header timing.
-- Local Room history, record sharing, CSV/JSON history export.
-- Thai/English UI, dark/light theme and reduced-motion support.
-- Responsive navigation for phone, tablet and larger screens.
-- Optional GPS mode. Starting a speed test does not require GPS permission.
-- External outage-status links. Zipspeed does not fabricate outage counts or live service status.
+## What this app does NOT claim
+- It is not yet a multi-server or multi-stream benchmark.
+- HTTP latency is not labeled as ICMP ping.
+- Client-area metadata is not GPS and is not labeled as server location.
+- No packet-loss result is shown because this MVP does not implement a supported real packet-loss method.
+- No outage status, AdMob, paid entitlement, billing, or subscription is simulated.
+- This ZIP has not passed a real Play Console release pipeline yet.
 
-## Real-data rule
+## Measurement provider used by this MVP
+- Metadata: `https://speed.cloudflare.com/meta`
+- Latency/download: `https://speed.cloudflare.com/__down`
+- Upload: `https://speed.cloudflare.com/__up`
 
-Production UI must not invent network measurements, ISP names, geographic server locations, outage counts, ad impressions, purchase entitlements or security verification. If data cannot be measured or verified, the UI should show an unavailable/unknown state.
+Provider use must be re-checked before production distribution. For a production-scale product, consider authorized/owned test infrastructure and explicit bandwidth controls.
 
-## Ads and paid Ad-Free
+## Default data usage per complete run
+- Download payload requested: 20 MiB.
+- Upload payload requested: 5 MiB.
+- Plus small metadata/latency requests and protocol overhead.
 
-The UI keeps integration points for ads and Ad-Free, but production AdMob and Google Play Billing are intentionally not enabled until real account configuration is supplied.
+The test can consume mobile data. The current UI states the default payload size.
 
-Do not ship simulated ads, fixed prices, local entitlement toggles or fake reward callbacks. Prices/currency must come from Google Play, and Ad-Free must be granted only after verified purchase entitlement. Rewarded access must only be granted from a real rewarded-ad callback.
+## Project configuration
+- Package: `com.anakinyoo.testspeed`
+- `minSdk = 24`
+- `targetSdk = 36`
+- `compileSdk = 37`
+- Android Gradle Plugin: 9.4.1
+- JDK: 17
+- AGP 9 built-in Kotlin is used; no separate Kotlin Android plugin is required.
+
+Current platform facts are documented in `PLATFORM_VERIFICATION.md` with official references and verification date.
 
 ## Build
+This generated ZIP does not bundle an unverified Gradle Wrapper JAR. Open the project in a compatible current Android Studio and sync with Gradle, or generate a trusted wrapper from an official Gradle installation compatible with AGP 9.4 (Gradle 9.6.0+).
 
-Prerequisites:
-
-- Android Studio / Android SDK
-- JDK 17
-
-CI uses:
-
-```bash
-gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug
-```
-
-The project targets Android API 36 and uses application ID:
+Suggested local validation sequence:
 
 ```text
-com.aistudio.zipspeed.zskt
+Gradle sync
+→ unit tests
+→ assembleDebug
+→ install on real Android device
+→ Wi-Fi test
+→ cellular test
+→ STOP/cancel test
+→ offline/error test
+→ rotate/responsive test
+→ background/onStop cancellation test
 ```
 
-Debug builds use Android's normal debug signing. Release signing expects these environment variables:
+## Source-of-truth documents
+- `MASTER_RULES_APPLIED.md` — permanent build/research integrity rules.
+- `APP_SCOPE_LOCK.md` — Must/Should/Could/Won't and acceptance scope.
+- `PRD_TRACEABILITY.md` — requirement → code → acceptance criteria.
+- `RESEARCH_TO_APP_OS.md` — thesis/research pipeline without fabricated evidence.
+- `PLATFORM_VERIFICATION.md` — externally verified Android/Play build facts.
+- `BUILD_CHECK.md` — what was and was not actually tested in the generation environment.
+
+## Production gate
+Do not call this app production-ready until all of these are real and passed:
 
 ```text
-KEYSTORE_PATH
-STORE_PASSWORD
-KEY_PASSWORD
+Real Android device matrix
+→ privacy/data-safety review
+→ provider terms/infrastructure review
+→ release signing
+→ release AAB
+→ Play internal/closed testing
+→ crash/performance review
+→ production release
 ```
 
-The release key alias is currently `upload`.
-
-`.env.example` contains safe placeholder values only. Do not commit real API keys, signing files or passwords.
-
-## Play Store release checks
-
-Before a production release:
-
-1. Run unit tests and build the debug/release artifacts.
-2. Test GO/STOP, gauge motion, Download/Upload, latency/jitter, offline/error handling and history on real Android devices.
-3. Verify every permission is necessary. GPS must remain optional.
-4. Re-check Privacy Policy and Data Safety against the actual code and SDKs used in that release.
-5. Configure real AdMob/consent and Google Play Billing before advertising those features.
-6. Build a signed AAB, test it in Play Console testing tracks, then verify the installed build.
-7. Increase `versionCode` for each Play release.
-
-## Branding
-
-App: **Zipspeed**  
-Credit: **by AnakinYoo**
+If AdMob or paid ad-free access is later added, insert real consent + AdMob + Play Billing steps before release; do not use simulations as production behavior.

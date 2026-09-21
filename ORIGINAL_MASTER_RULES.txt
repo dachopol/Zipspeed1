@@ -1,0 +1,36 @@
+ถูกต้อง โดยแก่นของ PR นี้คือ:
+
+- Compile/Responsive: แก้ scope, brace, `weight` และ Compose ให้ build ได้
+- Real Data: ค่าที่แสดงต้องมาจากการวัดจริง
+- Unknown > Fake: ไม่มีข้อมูลให้แสดง `--/ไม่ทราบ` ไม่เดา
+- Speed Test: ใช้ bytes + elapsed time จริง และตรวจ HTTP success
+- Status: ใช้ `EndpointHealthChecker` วัด endpoint จริง
+- IP/Server: ไม่ใช้ `cf-ray`, ping, พิกัด หรือเมืองปลอม
+- Video: เป็น HTTP throughput suitability ไม่อ้างว่าเล่นวิดีโอจริง
+- Ads/Billing: ปิดระบบจำลองไว้จนเชื่อม AdMob/Play Billing จริง
+- Outage: ใช้ลิงก์แหล่งข้อมูลจริง ไม่สร้างสถานะเอง
+- Play Store Docs: ข้อความตรงกับความสามารถจริง
+- Tests: เพิ่มกฎป้องกันค่าจำลองกลับเข้าระบบ
+
+จุดที่ต้องทำต่อก่อน Production:
+
+```text id="74t6i0"
+Real Android device test
+→ AdMob จริง
+→ Play Billing จริง
+→ Consent
+→ Privacy/Data Safety final
+→ Release signing
+→ AAB
+→ Play Console testing
+→ Production
+```
+
+หลักถาวรของ Zipspeed:
+
+```text id="y3vjs8"
+ห้าม Fake
+ห้าม Random ผลทดสอบ
+ห้าม Hardcode ค่าที่อ้างว่าเป็นข้อมูลจริง
+วัดไม่ได้ = แสดงไม่ทราบ/ผิดพลาด
+```
