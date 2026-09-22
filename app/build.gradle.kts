@@ -7,11 +7,11 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.anakinyoo.testspeed"
+        applicationId = "com.aistudio.zipspeed.zskt"
         minSdk = 24
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 44
+        versionName = "44.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
