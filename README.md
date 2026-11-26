@@ -92,3 +92,23 @@ Real Android device matrix
 ```
 
 If AdMob or paid ad-free access is later added, insert real consent + AdMob + Play Billing steps before release; do not use simulations as production behavior.
+
+
+## UCISE Local — คู่มือเริ่มต้นและ Documentation Gate / Getting started
+
+<!-- UCISE_DOCUMENTATION_GATE_V1 -->
+
+**ขั้นตอนเริ่มต้น (TH):** อ่าน What works, What this app does NOT claim และ Measurement provider → ตรวจ Project configuration และ Build → ก่อนเริ่ม GO ให้ตรวจเครือข่ายและปริมาณข้อมูลที่อาจใช้ตาม Default data usage → ใช้ STOP เพื่อหยุด → ตรวจผลที่วัดได้จริงและข้อจำกัด; ไม่ใช้ค่าเดาหรือสรุปว่า production พร้อมจาก MVP.
+
+**Getting started (EN):** Read the project-specific sections above. Confirm exact version, authorized workspace, platform and prerequisites before following any command. Run only documented, authorized steps; record actual output and errors. Do not infer runtime or release readiness from this documentation.
+
+### Required documentation before closing work
+
+- [ ] Purpose, exact version/source identity, prerequisites and installation/configuration.
+- [ ] Step-by-step user workflow, examples, expected outputs, and TH/EN guidance appropriate to the audience.
+- [ ] Build/run/test commands from actual source where applicable; record host, exact command, exit status and evidence. Untested commands are NOT_VERIFIED, not PASS.
+- [ ] Architecture, permissions, safety constraints, troubleshooting, recovery/rollback and limitations.
+- [ ] AI handoff: checkpoint, changed files, remaining tasks, dependency and next authorized action; research assumptions and evidence scope when applicable.
+- [ ] Review existing documentation first; update it without duplication; never copy secrets or local-only data to the cloud.
+
+Use README sections or existing linked guides; split into QUICKSTART, USER_GUIDE, AGENTS, TESTING, SECURITY, RESEARCH or RECOVERY files only when useful. Missing required documentation or evidence keeps the relevant DoD item INCOMPLETE/BLOCKED. This checklist is not a test receipt, native approval, release authorization or permission to bypass Owner/Watchdog Hold. Production and existing security gates remain unchanged. Documentation-only candidate; command execution and independent QA are NOT_RUN in this edit.
